@@ -28,6 +28,34 @@ function errorHandler(error, req, res, next) {
     });
   }
 
+  // ============================================================================
+  // TRATAMENTO DE ERRO: VIOLAÇÃO DE CONSTRAINT ÚNICA
+  // ============================================================================
+  // Código PostgreSQL 23505 = violação de constraint de unicidade
+  // Ocorre quando tenta-se inserir um valor duplicado em campo UNIQUE
+  // Exemplo: CPF ou Email já cadastrado
+  if (error.code === "23505") {
+    // Mapa de mensagens customizadas por tipo de constraint
+    // Cada chave corresponde a uma constraint definida no banco de dados
+    const mensagensPorConstraint = {
+      // Violação única de CPF - retorna mensagem específica
+      cliente_cpf_key: "CPF já cadastrado com esse cpf.",
+
+      // Violação única de Email - retorna mensagem específica
+      cliente_email_key: "Email já cadastrado com esse email.",
+    };
+
+    // Busca mensagem customizada ou usa mensagem genérica como fallback
+    const mensagem =
+      mensagensPorConstraint[error.constraint] ||
+      "Valor duplicado: registro já existe";
+
+    // Retorna 409 (Conflict) - padrão HTTP para conflito de recurso
+    return res.status(409).json({
+      mensagem,
+    });
+  }
+
   // Log de erro não tratado (ajuda no debug)
   console.error(error);
 
