@@ -1,17 +1,56 @@
-//centraliza a configuracao do banco de dados, conexao, etc
+/**
+ * CONFIGURAÇÃO DO BANCO DE DADOS
+ * 
+ * Centraliza a configuração de conexão com o banco de dados PostgreSQL.
+ * Utiliza pool de conexões para gerenciar múltiplas conexões eficientemente.
+ */
 
-const { Pool } = require("pg"); // Importa o módulo Pool do pg para gerenciar conexões com o PostgreSQL
-require('dotenv').config(); // Carrega as variáveis de ambiente do arquivo .env
+// ============================================================================
+// IMPORTAÇÕES
+// ============================================================================
 
+// Pool do driver pg (node-postgres) para gerenciar conexões com PostgreSQL
+const { Pool } = require("pg");
 
-// Cria uma instância do Pool com as configurações de conexão do banco de dados
+// Carrega variáveis de ambiente do arquivo .env
+require('dotenv').config();
+
+// ============================================================================
+// INICIALIZAÇÃO DO POOL DE CONEXÕES
+// ============================================================================
+
+/**
+ * Pool de conexões com o PostgreSQL
+ * 
+ * Gerencia múltiplas conexões simultâneas de forma eficiente,
+ * reutilizando conexões conforme necessário.
+ * 
+ * Configurações carregadas de variáveis de ambiente:
+ */
 const pool = new Pool({
-    host: process.env.DB_HOST, // Endereço do servidor do banco de dados
-    port: process.env.DB_PORT, // Porta do banco de dados
-    database: process.env.DB_NAME, // Nome do banco de dados
-    user: process.env.DB_USER, // Usuário do banco de dados
-    password: process.env.DB_PASSWORD // Senha do banco de dados
+  // Endereço do servidor do banco de dados
+  host: process.env.DB_HOST,
+
+  // Porta padrão PostgreSQL (normalmente 5432)
+  port: process.env.DB_PORT,
+
+  // Nome do banco de dados a ser utilizado
+  database: process.env.DB_NAME,
+
+  // Usuário para autenticação no banco de dados
+  user: process.env.DB_USER,
+
+  // Senha para autenticação no banco de dados
+  password: process.env.DB_PASSWORD,
 });
 
-// Exporta o pool para ser usado em outros módulos da aplicação
+// ============================================================================
+// EXPORTAÇÃO
+// ============================================================================
+
+/**
+ * Exporta o pool configurado para ser utilizado em toda a aplicação
+ * Exemplo de uso em repositories:
+ *   const result = await pool.query(sql, [values]);
+ */
 module.exports = pool;
