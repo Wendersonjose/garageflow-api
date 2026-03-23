@@ -1,8 +1,8 @@
-
 # Dependencies
 node_modules/
 
 # Logs
+logs/
 *.log
 npm-debug.log*
 yarn-debug.log*
@@ -11,16 +11,32 @@ pnpm-debug.log*
 
 # Environment
 .env
-.env.local
-.env.*.local
+.env.*
+!.env.example
 
-# Build
+# Build / Output
 dist/
 build/
 out/
 coverage/
 
-# IDE
+# Runtime / Temp
+tmp/
+temp/
+.cache/
+.tmp/
+
+# Uploads / Storage
+uploads/
+storage/
+public/uploads/
+
+# Database
+*.sqlite
+*.db
+*.sql
+
+# IDE / Editor
 .vscode/
 .idea/
 
@@ -28,6 +44,5 @@ coverage/
 .DS_Store
 Thumbs.db
 
-# Misc
-.cache/
-.tmp/
+# Package Managers
+.pnpm-store/
